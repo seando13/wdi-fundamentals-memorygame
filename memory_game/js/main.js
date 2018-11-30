@@ -30,28 +30,48 @@ var cards = [
 },
 ];
 var cardsInPlay = [];
+var score = 0;
+var result = document.getElementById("match-or-not");
+var clickedCards = document.getElementsByClassName("clicked");
+
+var flipBack = function (){
+	for (var i = 0; i < clickedCards.length; i+=1){
+		clickedCards[i].setAttribute("src","images/back.png");
+	}
+};
+
+var delayedFlipBack = function(){
+	var timeoutID = window.setTimeout(flipBack, 800);
+}
+
 var checkForMatch = function() {
   if (cardsInPlay[0] === cardsInPlay[1]) {
 alert("You found a match!"); // i took away console.log
+score += 1;
+		document.getElementById("score").textContent = score;
 } else {
 alert("Sorry, try again."); // i took away console.log
-};
+delayedFlipBack();
+}
+cardsInPlay = [];
 };
 
 function flipCard() {
     var cardId = this.getAttribute('data-id');
+    var card = cards[cardId];
+    this.setAttribute("src", card.cardImage);
+	  this.setAttribute("class", "clicked");
+	  console.log(this);
     cardsInPlay.push(cards[cardId].rank);
-     this.setAttribute('src', cards[cardId].cardImage);
+    this.setAttribute('src', cards[cardId].cardImage);
      if (cardsInPlay.length === 2){
        checkForMatch();
        //cardsInPlay = [];
 
     };
    };
-//console.log("User flipped " + cards[cardId].rank);
-//console.log(cards[cardId].cardImage);
-//console.log(cards[cardId].suit);}
-console.log(cardsInPlay);
+
+//console.log(cardsInPlay);
 
 
  function createBoard() {
@@ -62,48 +82,15 @@ console.log(cardsInPlay);
     cardElement.setAttribute('data-id', i);
     cardElement.addEventListener('click', flipCard);
     cardTable.appendChild(cardElement);
-
   }
 };
 
+var resetGame = function(){
+	score = 0;
+	document.getElementById("score").textContent = score;
+	result.textContent = "Ready for a new game??";
+	flipBack();
+};
+
 createBoard();
-//cardsInPlay.push("queen"[cardId].rank);
-// flipCard(0);
-// flipCard(2);
-//checkForMatch();
-
-
-  // if (cardsInPlay[0] === cardsInPlay[2]) {alert("You found a match!");}
-  //     else if (cardsInPlay[0] !== cardsInPlay[2]) alert("Sorry, try again");
-
-
-
-// cardsInPlay.push(cardOne);
-// cardsInPlay.push(cardTwo);
-// var cardOne = cards[0];
-// var cardTwo = cards[2];
-// cardsInPlay.push(cardOne);
-// cardsInPlay.push(cardTwo);
-//  var cardOne = cards[0];
-//  var cardTwo = cards[2];
-//
-// if (cardsInPlay[0] === cardsInPlay[2]) {alert("You found a match!");}
-//     else if (cardsInPlay[0] !== cardsInPlay[2]) alert("Sorry, try again");
-
-// var cardOne = cards[0];
-// cardsInPlay.push(cardOne);
-// console.log("User flipped " + cardOne);
-//
-// var cardTwo = cards[2];
-// cardsInPlay.push(cardTwo);
-// console.log("User flipped " + cardTwo);
-
-
-// console.log(cardsInPlay);
-// console.log("User flipped " + cardOne);
-// console.log("User flipped " + cardTwo);
-// console.log("User flipped " + cardThree);
-// console.log("User flipped " + cardFour);
-// console.log("User flipped " + cardOne);
-// console.log("User flipped " + cardTwo);
-// if (cardsInPlay.length === 2) {alert("You're all good!");}
+document.querySelector("button").addEventListener("click", resetGame)
